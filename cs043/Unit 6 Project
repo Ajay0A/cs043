@@ -21,32 +21,43 @@ class TicTacToe:
         print(' ' + board[7] + ' | ' + board[8] + ' | ' + board[9])
         print('   |   |')
 
-    def inputPlayerLetter(self):
+    def inputPlayerLetter(self, pref):
         # Lets the player type which letter they want to be.
         # Returns a list with the player's letter as the first item, and the computer's letter as the second.
         letter = ''
-        while not (letter == 'X' or letter == 'O'):
-            print('Do you want to be X or O?')
-            letter = input().upper()
+        if pref == 'c':
+            while not (letter == 'X' or letter == 'O'):
+                print('Do you want to be X or O?')
+                letter = input().upper()
 
-        # the first element in the tuple is the player's letter, the second is the computer's letter.
-        if letter == 'X':
-            return ['X', 'O']
-        else:
-            return ['O', 'X']
+            # the first element in the tuple is the player's letter, the second is the computer's letter.
+            if letter == 'X':
+                return ['X', 'O']
+            else:
+                return ['O', 'X']
+        elif pref == 'p':
+            while not (letter == 'X' or letter == 'O'):
+                print('Does Player 1 want to be X or O?')
+                letter = input().upper()
+
+            # the first element in the tuple is the player's letter, the second is the computer's letter.
+            if letter == 'X':
+                return ['X', 'O']
+            else:
+                return ['O', 'X']
 
     def whoGoesFirst(self, pref):
         # Randomly choose the player who goes first.
-        if pref == 'c':   
+        if pref == 'c':
             if random.randint(0, 1) == 0:
-                return 'computer'
+                return 'Computer'
             else:
-                return 'player'
+                return 'Player'
         else:
             if random.randint(0, 1) == 0:
-                return 'player 2'
+                return 'Player 2'
             else:
-                return 'player 1'
+                return 'Player 1'
 
     def playAgain(self):
         # This function returns True if the player wants to play again, otherwise it returns False.
@@ -81,11 +92,14 @@ class TicTacToe:
         # Return true if the passed move is free on the passed board.
         return board[move] == ' '
 
-    def getPlayerMove(self, board):
+    def getPlayerMove(self, board, pref):
         # Let the player type in his move.
         move = ' '
         while move not in '1 2 3 4 5 6 7 8 9'.split() or not self.isSpaceFree(board, int(move)):
-            print('What is Player 1\'s move? (1-9)')
+            if pref == 'p':
+                print('What is Player 1\'s move? (1-9)')
+            else:
+                print('What is your move? (1-9)')
             move = input()
         return int(move)
 
@@ -162,18 +176,18 @@ while True:
     # Reset the board
     theBoard = [' '] * 10
     print('Do you want to do Player VS Player(input \'p\') or Computer VS Player(input \'c\')')
-    pref = input.lower()
+    pref = input().lower()
     if pref == 'p':
-        playerLetter, player2Letter = play.inputPlayerLetter()
+        playerLetter, player2Letter = play.inputPlayerLetter(pref)
         turn = play.whoGoesFirst(pref)
         print('The ' + turn + ' will go first.')
         gameIsPlaying = True
 
         while gameIsPlaying:
-            if turn == 'player 1':
+            if turn == 'Player 1':
                 # Player's turn.
                 play.drawBoard(theBoard)
-                move = play.getPlayerMove(theBoard)
+                move = play.getPlayerMove(theBoard, pref)
                 play.makeMove(theBoard, playerLetter, move)
 
                 if play.isWinner(theBoard, playerLetter):
@@ -186,12 +200,12 @@ while True:
                         print('The game is a tie!')
                         break
                     else:
-                        turn = 'player 2'
+                        turn = 'Player 2'
 
             else:
                 # Player's turn.
                 play.drawBoard(theBoard)
-                move = play.getPlayerMove(theBoard)
+                move = play.getPlayer2Move(theBoard)
                 play.makeMove(theBoard, player2Letter, move)
 
                 if play.isWinner(theBoard, player2Letter):
@@ -204,22 +218,22 @@ while True:
                         print('The game is a tie!')
                         break
                     else:
-                        turn = 'player 1'
+                        turn = 'Player 1'
 
         if not play.playAgain():
             break
 
     elif pref == 'c':
-        playerLetter, computerLetter = play.inputPlayerLetter()
-        turn = play.whoGoesFirst()
+        playerLetter, computerLetter = play.inputPlayerLetter(pref)
+        turn = play.whoGoesFirst(pref)
         print('The ' + turn + ' will go first.')
         gameIsPlaying = True
 
         while gameIsPlaying:
-            if turn == 'player':
+            if turn == 'Player':
                 # Player's turn.
                 play.drawBoard(theBoard)
-                move = play.getPlayerMove(theBoard)
+                move = play.getPlayerMove(theBoard, pref)
                 play.makeMove(theBoard, playerLetter, move)
 
                 if play.isWinner(theBoard, playerLetter):
@@ -232,7 +246,7 @@ while True:
                         print('The game is a tie!')
                         break
                     else:
-                        turn = 'computer'
+                        turn = 'Computer'
 
             else:
                 # Computer's turn.
@@ -249,7 +263,7 @@ while True:
                         print('The game is a tie!')
                         break
                     else:
-                        turn = 'player'
+                        turn = 'Player'
 
         if not play.playAgain():
             break
