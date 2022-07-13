@@ -74,7 +74,7 @@ def application(environ, start_response):
         headers.append(('Set-Cookie', 'session={}:{}; expires=Thu, 01 Jan 1970 00:00:00 GMT'.format(un, pw)))
         headers.append(('Set-Cookie', 'score={}:{}; expires=Thu, 01 Jan 1970 00:00:00 GMT'.format(correct, wrong)))
         start_response('200 OK', headers)
-        return ['Logged out. <a href="/login">Login</a>'.encode()]
+        return ['Logged out. <a href="/">Login</a>'.encode()]
 
     elif path == '/account':
         start_response('200 OK', headers)
