@@ -26,7 +26,7 @@ def application(environ, start_response):
 
     if path == '/register' and un and pw:
         user = cursor.execute('SELECT username FROM multiply WHERE username = ?', [un]).fetchall()
-        if un != True and user:
+        if un is not True and user:
             start_response('200 OK', headers)
             return ['Sorry, username {} is taken'.format(un).encode()]
         else:
@@ -45,7 +45,7 @@ def application(environ, start_response):
             connection.commit()
             headers.append(('Set-Cookie', 'session={}:{}'.format(un, pw)))
             start_response('200 OK', headers)
-            if un == True:
+            if un is True:
                 return[page.encode()]
             else:
                 return [page.encode(), 'Username {} was successfully registered. <br><br><a href="/account">Account</a>'.format(un).encode()]
@@ -62,7 +62,7 @@ def application(environ, start_response):
             </form>'''
             headers.append(('Set-Cookie', 'session={}:{}'.format(un, pw)))
             start_response('200 OK', headers)
-            if un == True:
+            if un is True:
                 return[page.encode()]
             else:
                 return [page.encode(), 'User {} successfully logged in. <a href="/account">Account</a>'.format(un).encode()]
@@ -108,7 +108,6 @@ def application(environ, start_response):
             if 'HTTP_COOKIE' in environ:
                 correct = int(cookies['score'].value.split(':')[0])
                 wrong = int(cookies['score'].value.split(':')[1])
-
 
             page = '<!DOCTYPE html><html><head><title>Multiply with Score</title></head><body>'
             if 'factor1' in params and 'factor2' in params and 'answer' in params:
@@ -167,36 +166,51 @@ def application(environ, start_response):
 
     elif path == '/':
         user = cursor.execute('SELECT username FROM multiply WHERE username = ?', [un]).fetchall()
-        if un != True and user:
+        if un is not True and user:
             start_response('200 OK', headers)
             return ['Sorry, username {} is taken'.format(un).encode()]
 
-        page = '''<!DOCTYPE html>
-            <form action='/'>
-            <h1>Register</h1>
-            Username <input type="text" name="username"><br>
-            Password <input type="password" name="password"><br>
-            <br>
-            <input type="submit" value="Register"><br>
-            <hr>
-            </form>
-            <form>
-            <h1>Login</h1>
-            Username <input type="text" name="username"><br>
-            Password <input type="password" name="password"><br>
-            <br>
-            <input type="submit" value="Log in">
-            </form>'''
-        connection.execute('INSERT INTO multiply VALUES (?, ?, ?, ?)', [un, pw, 0, 0])
-        connection.commit()
-        headers.append(('Set-Cookie', 'session={}:{}'.format(un, pw)))
-        start_response('200 OK', headers)
-        if un == True:
-            return [page.encode()]
         else:
-            return [page.encode(),
-                    'Username {} was successfully registered. <br><br><a href="/account">Account</a>'.format(
-                        un).encode()]
+            page = '''<!DOCTYPE html>
+                <form action='/'>
+                <h1>Register</h1>
+                Username <input type="text" name="username"><br>
+                Password <input type="password" name="password"><br>
+                <br>
+                <input type="submit" value="Register"><br>
+                <hr>
+                </form>
+                <form>
+                <h1>Login</h1>
+                Username <input type="text" name="username2"><br>
+                Password <input type="password" name="password2"><br>
+                <br>
+                <input type="submit" value="Log in">
+                </form>'''
+        if 'username' in params:
+            connection.execute('INSERT INTO multiply VALUES (?, ?, ?, ?)', [un, pw, 0, 0])
+            connection.commit()
+            headers.append(('Set-Cookie', 'session={}:{}'.format(un, pw)))
+            start_response('200 OK', headers)
+
+            if un is True:
+                return [page.encode()]
+            else:
+                return [page.encode(),
+                        'Username {} was successfully registered. <br><br><a href="/account">Account</a>'.format(un).encode()]
+        elif 'username2' in params:
+            un2 = params['username2'][0] if 'username2' in params else True
+            pw2 = params['password2'][0] if 'password2' in params else True
+            headers.append(('Set-Cookie', 'session={}:{}'.format(un2, pw2)))
+            start_response('200 OK', headers)
+            if un2 is True:
+                return [page.encode()]
+            else:
+                return [page.encode(), 'User {} successfully logged in. <a href="/account">Account</a>'.format(un2).encode()]
+        else:
+            start_response('200 OK', headers)
+            if un is True:
+                return [page.encode()]
 
     else:
         start_response('404 Not Found', headers)
