@@ -188,7 +188,9 @@ while True:
         while gameIsPlaying:
             if turn == 'Player 1':
                 # Player 1's turn.
+                time.sleep(0.5)
                 play.drawBoard(theBoard)
+                time.sleep(0.5)
                 move = play.getPlayerMove(theBoard, pref)
                 play.makeMove(theBoard, playerLetter, move)
 
@@ -206,7 +208,9 @@ while True:
 
             else:
                 # Player 2's turn.
+                time.sleep(0.5)
                 play.drawBoard(theBoard)
+                time.sleep(0.5)
                 move = play.getPlayer2Move(theBoard)
                 play.makeMove(theBoard, player2Letter, move)
 
@@ -223,6 +227,7 @@ while True:
                         turn = 'Player 1'
 
         if not play.playAgain():
+            print("Thanks for playing!")
             break
 
     elif pref == 'c':
@@ -235,7 +240,9 @@ while True:
         while gameIsPlaying:
             if turn == 'Player':
                 # Player's turn.
+                time.sleep(0.5)
                 play.drawBoard(theBoard)
+                time.sleep(0.5)
                 move = play.getPlayerMove(theBoard, pref)
                 play.makeMove(theBoard, playerLetter, move)
 
