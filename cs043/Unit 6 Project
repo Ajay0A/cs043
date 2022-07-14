@@ -271,6 +271,3 @@ while True:
         if not play.playAgain():
             print("Thanks for playing!")
             break
-    else:
-        print('Please input \'p\' or \'c\'', end=" ")
-        pref = input().lower()
