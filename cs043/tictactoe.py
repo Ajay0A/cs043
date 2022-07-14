@@ -61,8 +61,11 @@ class TicTacToe:
 
     def playAgain(self):
         # This function returns True if the player wants to play again, otherwise it returns False.
-        print('Do you want to play again? (yes or no)')
-        return input().lower().startswith('y')
+        answer = 0
+        while answer != 'yes' and answer != 'no' and answer != 'y' and answer != 'n':
+            print('Do you want to play again? (yes or no)')
+            answer = input().lower()
+        return answer.startswith('y')
 
     def makeMove(self, board, letter, move):
         board[move] = letter
@@ -230,22 +233,26 @@ while True:
         turn = play.whoGoesFirst(pref)
         time.sleep(0.5)
         print('The ' + turn + ' will go first.')
+        time.sleep(0.5)
         gameIsPlaying = True
 
         while gameIsPlaying:
             if turn == 'Player':
                 # Player's turn.
                 play.drawBoard(theBoard)
+                time.sleep(0.5)
                 move = play.getPlayerMove(theBoard, pref)
                 play.makeMove(theBoard, playerLetter, move)
 
                 if play.isWinner(theBoard, playerLetter):
                     play.drawBoard(theBoard)
+                    time.sleep(0.5)
                     print('Hooray! You have won the game!')
                     gameIsPlaying = False
                 else:
                     if play.isBoardFull(theBoard):
                         play.drawBoard(theBoard)
+                        time.sleep(0.5)
                         print('The game is a tie!')
                         break
                     else:
@@ -258,11 +265,13 @@ while True:
 
                 if play.isWinner(theBoard, computerLetter):
                     play.drawBoard(theBoard)
+                    time.sleep(0.5)
                     print('The computer has beaten you! You lose.')
                     gameIsPlaying = False
                 else:
                     if play.isBoardFull(theBoard):
                         play.drawBoard(theBoard)
+                        time.sleep(0.5)
                         print('The game is a tie!')
                         break
                     else:
