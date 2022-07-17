@@ -35,7 +35,7 @@ class TicTacToe:
                 return ['X', 'O']
             else:
                 return ['O', 'X']
-        elif pref == 'p':
+        elif play.pref == 'p':
             while not (letter == 'X' or letter == 'O'):
                 print('Does Player 1 want to be X or O?')
                 letter = input().upper()
@@ -61,18 +61,15 @@ class TicTacToe:
 
     def playAgain(self):
         # This function returns True if the player wants to play again, otherwise it returns False.
-        answer = 0
-        while answer != 'yes' and answer != 'no' and answer != 'y' and answer != 'n':
-            print('Do you want to play again? (yes or no)')
-            answer = input().lower()
-        return answer.startswith('y')
+        print('Do you want to play again? (yes or no)')
+        return input().lower().startswith('y')
 
     def makeMove(self, board, letter, move):
         board[move] = letter
 
     def isWinner(self, bo, le):
         # Given a board and a player's letter, this function returns True if that player has won.
-        # We use bo instead of board and le instead of letter so we don't have to type as much.
+        # We use bo instead of board and le instead of letter, so we don't have to type as much.
         return ((bo[7] == le and bo[8] == le and bo[9] == le) or  # across the top
                 (bo[4] == le and bo[5] == le and bo[6] == le) or  # across the middle
                 (bo[1] == le and bo[2] == le and bo[3] == le) or  # across the bottom
@@ -99,7 +96,7 @@ class TicTacToe:
         # Let the player type in his move.
         move = ' '
         while move not in '1 2 3 4 5 6 7 8 9'.split() or not self.isSpaceFree(board, int(move)):
-            if pref == 'p':
+            if play.pref == 'p':
                 print('What is Player 1\'s move? (1-9)')
             else:
                 print('What is your move? (1-9)')
@@ -164,11 +161,15 @@ class TicTacToe:
         return self.chooseRandomMoveFromList(board, [2, 4, 6, 8])
 
     def isBoardFull(self, board):
-        # Return True if every space on the board has been taken. Otherwise return False.
+        # Return True if every space on the board has been taken. Otherwise, return False.
         for i in range(1, 10):
             if self.isSpaceFree(board, i):
                 return False
         return True
+
+    theBoard = [' '] * 10
+    askForPreference = 'Do you want to do Player VS Player (input \'p\') or Computer VS Player (input \'c\'): '
+    pref = input().lower()
 
 
 play = TicTacToe()
@@ -178,12 +179,11 @@ print()
 
 while True:
     # Reset the board
-    theBoard = [' '] * 10
-    print('Do you want to do Player VS Player (input \'p\') or Computer VS Player (input \'c\'): ', end="")
-    pref = input().lower()
-    if pref == 'p':
-        playerLetter, player2Letter = play.inputPlayerLetter(pref)
-        turn = play.whoGoesFirst(pref)
+    print(play.askForPreference)
+    play.pref
+    if play.pref == 'p':
+        playerLetter, player2Letter = play.inputPlayerLetter(play.pref)
+        turn = play.whoGoesFirst(play.pref)
         time.sleep(0.5)
         print('The ' + turn + ' will go first.')
         gameIsPlaying = True
@@ -191,17 +191,19 @@ while True:
         while gameIsPlaying:
             if turn == 'Player 1':
                 # Player 1's turn.
-                play.drawBoard(theBoard)
-                move = play.getPlayerMove(theBoard, pref)
-                play.makeMove(theBoard, playerLetter, move)
+                time.sleep(0.5)
+                play.drawBoard(play.theBoard)
+                time.sleep(0.5)
+                move = play.getPlayerMove(play.theBoard, play.pref)
+                play.makeMove(play.theBoard, playerLetter, move)
 
-                if play.isWinner(theBoard, playerLetter):
-                    play.drawBoard(theBoard)
+                if play.isWinner(play.theBoard, playerLetter):
+                    play.drawBoard(play.theBoard)
                     print('Hooray! Player 1 has won the game!')
                     gameIsPlaying = False
                 else:
-                    if play.isBoardFull(theBoard):
-                        play.drawBoard(theBoard)
+                    if play.isBoardFull(play.theBoard):
+                        play.drawBoard(play.theBoard)
                         print('The game is a tie!')
                         break
                     else:
@@ -209,50 +211,51 @@ while True:
 
             else:
                 # Player 2's turn.
-                play.drawBoard(theBoard)
-                move = play.getPlayer2Move(theBoard)
-                play.makeMove(theBoard, player2Letter, move)
+                time.sleep(0.5)
+                play.drawBoard(play.theBoard)
+                time.sleep(0.5)
+                move = play.getPlayer2Move(play.theBoard)
+                play.makeMove(play.theBoard, player2Letter, move)
 
-                if play.isWinner(theBoard, player2Letter):
-                    play.drawBoard(theBoard)
+                if play.isWinner(play.theBoard, player2Letter):
+                    play.drawBoard(play.theBoard)
                     print('Hooray! Player 2 has won the game!')
                     gameIsPlaying = False
                 else:
-                    if play.isBoardFull(theBoard):
-                        play.drawBoard(theBoard)
+                    if play.isBoardFull(play.theBoard):
+                        play.drawBoard(play.theBoard)
                         print('The game is a tie!')
                         break
                     else:
                         turn = 'Player 1'
 
         if not play.playAgain():
+            print("Thanks for playing!")
             break
 
-    elif pref == 'c':
-        playerLetter, computerLetter = play.inputPlayerLetter(pref)
-        turn = play.whoGoesFirst(pref)
+    elif play.pref == 'c':
+        playerLetter, computerLetter = play.inputPlayerLetter(play.pref)
+        turn = play.whoGoesFirst(play.pref)
         time.sleep(0.5)
         print('The ' + turn + ' will go first.')
-        time.sleep(0.5)
         gameIsPlaying = True
 
         while gameIsPlaying:
             if turn == 'Player':
                 # Player's turn.
-                play.drawBoard(theBoard)
                 time.sleep(0.5)
-                move = play.getPlayerMove(theBoard, pref)
-                play.makeMove(theBoard, playerLetter, move)
+                play.drawBoard(play.theBoard)
+                time.sleep(0.5)
+                move = play.getPlayerMove(play.theBoard, play.pref)
+                play.makeMove(play.theBoard, playerLetter, move)
 
-                if play.isWinner(theBoard, playerLetter):
-                    play.drawBoard(theBoard)
-                    time.sleep(0.5)
+                if play.isWinner(play.theBoard, playerLetter):
+                    play.drawBoard(play.theBoard)
                     print('Hooray! You have won the game!')
                     gameIsPlaying = False
                 else:
-                    if play.isBoardFull(theBoard):
-                        play.drawBoard(theBoard)
-                        time.sleep(0.5)
+                    if play.isBoardFull(play.theBoard):
+                        play.drawBoard(play.theBoard)
                         print('The game is a tie!')
                         break
                     else:
@@ -260,18 +263,16 @@ while True:
 
             else:
                 # Computer's turn.
-                move = play.getComputerMove(theBoard, computerLetter)
-                play.makeMove(theBoard, computerLetter, move)
+                move = play.getComputerMove(play.theBoard, computerLetter)
+                play.makeMove(play.theBoard, computerLetter, move)
 
-                if play.isWinner(theBoard, computerLetter):
-                    play.drawBoard(theBoard)
-                    time.sleep(0.5)
+                if play.isWinner(play.theBoard, computerLetter):
+                    play.drawBoard(play.theBoard)
                     print('The computer has beaten you! You lose.')
                     gameIsPlaying = False
                 else:
-                    if play.isBoardFull(theBoard):
-                        play.drawBoard(theBoard)
-                        time.sleep(0.5)
+                    if play.isBoardFull(play.theBoard):
+                        play.drawBoard(play.theBoard)
                         print('The game is a tie!')
                         break
                     else:
