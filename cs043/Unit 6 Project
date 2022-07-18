@@ -8,7 +8,7 @@ import time
 # Create a class with all the functions and variables we need
 class TicTacToe:
 
-    # Create a function that draws the Tic Tac Toe board
+    # Define a function that draws the Tic Tac Toe board
     def drawBoard(self, board):
         # This function prints out the board that it was passed.
 
@@ -69,13 +69,17 @@ class TicTacToe:
 
     # Asks the player if they want to play again
     def playAgain(self):
-        # This function returns True if the player wants to play again, otherwise it returns False.
-        print('Do you want to play again? (yes or no)')
-        return input().lower().startswith('y')
+        # This function returns True if the player wants to play again,
+        # otherwise it returns False, making sure the user enters either 'yes' or 'no'
+        again = ' '
+        while again != 'no' and again != 'yes':
+            print('Do you want to play again? (yes or no)')
+            again = input().lower()
+        return again
 
     # Change the board so that it reflects player's move
     def makeMove(self, board, letter, move):
-        board[self.move] = letter
+        board[move] = letter
 
     # Checks if someone has 3 in a row
     def isWinner(self, bo, le):
@@ -99,9 +103,9 @@ class TicTacToe:
 
     # Return true if the passed move is valid (the board index is empty)
     def isSpaceFree(self, board, move):
-        return board[self.move] == ' '
+        return board[move] == ' '
 
-    # The next 2 functions get player 1's move and player 2's move
+    # The next 2 functions get player 1's move (or just player if the user chose PvC) and player 2's move
     def getPlayerMove(self, board, pref):
         # Let the player type in his move.
         self.move = ' '
@@ -196,6 +200,7 @@ print('Welcome to Tic Tac Toe!')
 print()
 
 while True:
+    # Reset the board
     play.theBoard = [' '] * 10
     # Reassign the 'pref' variable to the return value of the askForPreference function
     play.pref = play.askForPreference()
@@ -205,7 +210,7 @@ while True:
         play.turn = play.whoGoesFirst(play.pref)
         # Pause time for half a second so the user can see what is being printed more easily
         time.sleep(0.5)
-        print('The ' + play.turn + ' will go first.')
+        print(play.turn + ' will go first.')
         gameIsPlaying = True
 
         while gameIsPlaying:
@@ -256,7 +261,8 @@ while True:
             print("Thanks for playing!")
             break
 
-    # Now, we check if the user's preference is PvC and execute the functions needed for it
+    # Now, we check if the user's preference is PvC and execute the functions needed for it,
+    # assigning 'turn', 'pref', and 'move' accordingly
     elif play.pref == 'c':
         playerLetter, computerLetter = play.inputPlayerLetter(play.pref)
         play.turn = play.whoGoesFirst(play.pref)
@@ -266,7 +272,7 @@ while True:
 
         while gameIsPlaying:
             if play.turn == 'Player':
-                # Player's play.turn.
+                # Player's turn.
                 time.sleep(0.5)
                 play.drawBoard(play.theBoard)
                 time.sleep(0.5)
@@ -306,3 +312,4 @@ while True:
         if not play.playAgain():
             print("Thanks for playing!")
             break
+            
