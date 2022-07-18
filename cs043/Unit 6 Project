@@ -167,9 +167,15 @@ class TicTacToe:
                 return False
         return True
 
+    def askForPreference(self):
+        print('Do you want to do Player VS Player (input \'p\') or Computer VS Player (input \'c\'): ')
+        pref = input().lower()
+        return pref
+
+    pref = ''
+    turn = ''
+    move = 0
     theBoard = [' '] * 10
-    askForPreference = 'Do you want to do Player VS Player (input \'p\') or Computer VS Player (input \'c\'): '
-    pref = input().lower()
 
 
 play = TicTacToe()
@@ -179,18 +185,17 @@ print()
 
 while True:
     # Reset the board
-    print(play.askForPreference)
-    play.pref
+    play.pref = play.askForPreference()
     if play.pref == 'p':
         playerLetter, player2Letter = play.inputPlayerLetter(play.pref)
-        turn = play.whoGoesFirst(play.pref)
+        play.turn = play.whoGoesFirst(play.pref)
         time.sleep(0.5)
-        print('The ' + turn + ' will go first.')
+        print('The ' + play.turn + ' will go first.')
         gameIsPlaying = True
 
         while gameIsPlaying:
-            if turn == 'Player 1':
-                # Player 1's turn.
+            if play.turn == 'Player 1':
+                # Player 1's play.turn.
                 time.sleep(0.5)
                 play.drawBoard(play.theBoard)
                 time.sleep(0.5)
@@ -207,10 +212,10 @@ while True:
                         print('The game is a tie!')
                         break
                     else:
-                        turn = 'Player 2'
+                        play.turn = 'Player 2'
 
             else:
-                # Player 2's turn.
+                # Player 2's play.turn.
                 time.sleep(0.5)
                 play.drawBoard(play.theBoard)
                 time.sleep(0.5)
@@ -227,7 +232,7 @@ while True:
                         print('The game is a tie!')
                         break
                     else:
-                        turn = 'Player 1'
+                        play.turn = 'Player 1'
 
         if not play.playAgain():
             print("Thanks for playing!")
@@ -235,14 +240,14 @@ while True:
 
     elif play.pref == 'c':
         playerLetter, computerLetter = play.inputPlayerLetter(play.pref)
-        turn = play.whoGoesFirst(play.pref)
+        play.turn = play.whoGoesFirst(play.pref)
         time.sleep(0.5)
-        print('The ' + turn + ' will go first.')
+        print('The ' + play.turn + ' will go first.')
         gameIsPlaying = True
 
         while gameIsPlaying:
-            if turn == 'Player':
-                # Player's turn.
+            if play.turn == 'Player':
+                # Player's play.turn.
                 time.sleep(0.5)
                 play.drawBoard(play.theBoard)
                 time.sleep(0.5)
@@ -259,7 +264,7 @@ while True:
                         print('The game is a tie!')
                         break
                     else:
-                        turn = 'Computer'
+                        play.turn = 'Computer'
 
             else:
                 # Computer's turn.
@@ -276,7 +281,7 @@ while True:
                         print('The game is a tie!')
                         break
                     else:
-                        turn = 'Player'
+                        play.turn = 'Player'
 
         if not play.playAgain():
             print("Thanks for playing!")
